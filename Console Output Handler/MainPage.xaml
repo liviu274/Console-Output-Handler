@@ -1,0 +1,17 @@
+﻿<Page
+    x:Class="Console_Output_Handler.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Console_Output_Handler"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Height="250" Width="476">
+        <TextBlock Text="Select the location of the executable:" TextAlignment="Center" Margin="5" Foreground="White" FontSize="10" HorizontalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="pickFileButton" Click="pickFileButton_Click" Foreground="White" HorizontalAlignment="Left" HorizontalContentAlignment="Center" FontSize="8" BorderThickness="0,0,0,0">browse..</Button>
+        </StackPanel>
+
+    </StackPanel>
+</Page>
