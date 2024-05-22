@@ -3,11 +3,15 @@
 #include "MainPage.g.cpp"
 
 
+// File open picker
 using namespace winrt;
 using namespace Windows::Foundation;
 using namespace Windows::Storage;
 using namespace Windows::Storage::Pickers;
+using namespace Windows::System;
+using namespace Windows::UI::Core;
 using namespace Windows::UI::Xaml;
+using namespace Windows::UI::Xaml::Controls;
 
 
 
@@ -23,16 +27,20 @@ namespace winrt::Console_Output_Handler::implementation
         throw hresult_not_implemented();
     }
 
-    void MainPage::pickFileButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e)
+    LPCWSTR MainPage::ConvertDWORDToLPCWSTR(DWORD value)   // Private function used for OutpputDeebug error logs
     {
-        pickFileButton().Content(box_value(L"clicked"));
-        PickExecutableFile();
-
-        for (const auto &filePath : myFilePaths)
-            OutputDebugString((filePath + L"\n").c_str());
+        std::wstringstream wss;
+        wss << value;
+        return wss.str().c_str();
     }
 
-    void MainPage::PickExecutableFile()
+    void MainPage::pickFileButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e)
+    {
+        PickExecutableOrTextFile();
+        
+    }
+
+    void MainPage::PickExecutableOrTextFile()
     {
         // Initialize the FileOpenPicker
 
@@ -40,6 +48,7 @@ namespace winrt::Console_Output_Handler::implementation
         picker.ViewMode(PickerViewMode::List);
         picker.SuggestedStartLocation(PickerLocationId::Desktop);
         picker.FileTypeFilter().Append(L".exe");
+        picker.FileTypeFilter().Append(L".txt");
 
         // Show the picker and get the selected file
         picker.PickSingleFileAsync().Completed([this](IAsyncOperation<StorageFile> const& operation, AsyncStatus const status) {
@@ -49,12 +58,90 @@ namespace winrt::Console_Output_Handler::implementation
                 if (file)
                 {
                     // Handle the selected file
-                    myFilePaths.push_back(file.Path());
-                    // Do something with the file path (e.g., display it, use it in your app, etc.)
-                    OutputDebugString(file.Path().c_str());
+                    
+                    // Output the file for debuging purposes
+                    OutputDebugString((L"FILE PATH: " + file.Path() + L"\n").c_str());
+
+                    //Execute file from path
+                    if (file.FileType() == L".exe")
+                        RunExecutableFile(file.Path().c_str());
+                    else if (file.FileType() == L".txt")
+                        ReadTextFile(file);
+                    else
+                        OutputDebugString(L"ERROR FILE TYPE NOT SUPPORTED");
+ 
                 }
+                
             }
             });
+        
+    }
+
+    void MainPage::RunExecutableFile(LPCWSTR FILE_PATH)
+    {
+        // Prepare to start the selected executable
+        STARTUPINFO startupInfo = { sizeof(startupInfo) };
+        PROCESS_INFORMATION processInfo;
+
+        // ZeroMemory is not strictly necessary but ensures fields are initialized to zero
+        ZeroMemory(&startupInfo, sizeof(startupInfo));
+        ZeroMemory(&processInfo, sizeof(processInfo));
+
+        // Start the process
+        if (CreateProcess(
+            FILE_PATH,                  // Path of the .exe file
+            nullptr,                   // Command line
+            nullptr,                   // Process handle not inheritable
+            nullptr,                   // Thread handle not inheritable
+            FALSE,                     // Set handle inheritance to FALSE
+            0,                         // No creation flags
+            nullptr,                   // Use parent's environment block
+            nullptr,                   // Use parent's starting directory
+            &startupInfo,              // Pointer to STARTUPINFO structure
+            &processInfo               // Pointer to PROCESS_INFORMATION structure
+        ))
+        {
+            // Successfully created the process
+            // Close process and thread handles
+            CloseHandle(processInfo.hProcess);
+            CloseHandle(processInfo.hThread);
+        }
+        else
+        {
+            // Failed to create the process, handle error
+            OutputDebugString(L"Exited with error code - ");
+            OutputDebugString(ConvertDWORDToLPCWSTR(GetLastError()));  // Return error code
+            OutputDebugString(L"\n");
+        }
+    }
+
+    void MainPage::ReadTextFile(winrt::Windows::Storage::StorageFile const& file)
+    {
+        
+
+        FileIO::ReadTextAsync(file).Completed([this, file](IAsyncOperation<hstring> const& readOperation, AsyncStatus const readStatus) {
+            if (readStatus == AsyncStatus::Completed)
+            {
+                this->fileName = readOperation.GetResults();
+                this->fileContent = file.DisplayName();
+                OutputDebugString(fileContent.c_str());  // for debug puposes
+ 
+            }
+            else
+            {
+                OutputDebugString(L"Failed to read the text file.\n");
+            }
+            });
+    }
+
+    void MainPage::DisplayFileName()
+    {
+        fileNameTextBlock().Text(this->fileName);
+    }
+
+    void MainPage::DisplayFileContent()
+    {
+        fileNameTextBlock().Text(this->fileContent);
     }
 }
 

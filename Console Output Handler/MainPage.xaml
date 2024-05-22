@@ -7,11 +7,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Height="250" Width="476">
-        <TextBlock Text="Select the location of the executable:" TextAlignment="Center" Margin="5" Foreground="White" FontSize="10" HorizontalAlignment="Center"/>
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Height="380" Width="960" >
+        <TextBlock
+            Text="Select the location of a text file:"
+            TextAlignment="Center" Margin="5" Foreground="White"
+            Style="{StaticResource SubheaderTextBlockStyle}"
+            FontWeight="Medium" HorizontalAlignment="Center"
+        />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="pickFileButton" Click="pickFileButton_Click" Foreground="White" HorizontalAlignment="Left" HorizontalContentAlignment="Center" FontSize="8" BorderThickness="0,0,0,0">browse..</Button>
+            <Button x:Name="pickFileButton" Click="pickFileButton_Click" Foreground="White" HorizontalContentAlignment="Center" FontSize="12" BorderThickness="0,0,0,0" Height="30" Width="76" Padding="5">browse..</Button>
         </StackPanel>
 
+        <TextBlock x:Name="fileNameTextBlock" Text="test" Foreground="White" VerticalAlignment="Center" Padding="30, 5" Style="{StaticResource SubtitleTextBlockStyle}"/>
     </StackPanel>
 </Page>
