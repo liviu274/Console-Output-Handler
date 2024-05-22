@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Height="380" Width="960" >
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Height="380" Width="960">
         <TextBlock
             Text="Select the location of a text file:"
             TextAlignment="Center" Margin="5" Foreground="White"
@@ -15,9 +15,20 @@
             FontWeight="Medium" HorizontalAlignment="Center"
         />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="pickFileButton" Click="pickFileButton_Click" Foreground="White" HorizontalContentAlignment="Center" FontSize="12" BorderThickness="0,0,0,0" Height="30" Width="76" Padding="5">browse..</Button>
+            <Button x:Name="pickFileButton" Click="pickFileButton_Click"  Foreground="White" HorizontalContentAlignment="Center" FontSize="12" BorderThickness="0,0,0,0" Height="30" Width="76" Content="browse.." Padding="5" Margin="0,0,10,0"/>
+            <Button x:Name="loadFileButton" Click="loadFileButton_Click" Foreground="White" HorizontalContentAlignment="Center" FontSize="12" BorderThickness="0,0,0,0" Height="30" Width="76" Padding="5" Content="load" Margin="0,0,0,0"/>
         </StackPanel>
 
-        <TextBlock x:Name="fileNameTextBlock" Text="test" Foreground="White" VerticalAlignment="Center" Padding="30, 5" Style="{StaticResource SubtitleTextBlockStyle}"/>
+        <TextBlock Text="Content inside the text document:" Foreground="White" Style="{StaticResource SubtitleTextBlockStyle}" Padding="30, 50, 30, 50"/>
+        <ScrollViewer Height="282" Width="672"
+                      IsTabStop="True" IsVerticalScrollChainingEnabled="True"
+                      HorizontalAlignment="Center"
+                      ViewChanged="ScrollViewer_ViewChanged"
+                      VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto">
+            <ScrollViewer.RenderTransform>
+                <CompositeTransform SkewY="-0.302" TranslateY="-1.595"/>
+            </ScrollViewer.RenderTransform>
+            <TextBlock x:Name="fileContentTextBlock" Text="debug mode" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}" Padding="30, 5" SelectionChanged="fileContentTextBlock_SelectionChanged"/>
+        </ScrollViewer>
     </StackPanel>
 </Page>

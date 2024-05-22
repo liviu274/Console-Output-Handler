@@ -37,7 +37,11 @@ namespace winrt::Console_Output_Handler::implementation
     void MainPage::pickFileButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e)
     {
         PickExecutableOrTextFile();
-        
+    }
+
+    void MainPage::loadFileButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e)
+    {
+        fileContentTextBlock_SelectionChanged(sender, e);
     }
 
     void MainPage::PickExecutableOrTextFile()
@@ -122,27 +126,25 @@ namespace winrt::Console_Output_Handler::implementation
         FileIO::ReadTextAsync(file).Completed([this, file](IAsyncOperation<hstring> const& readOperation, AsyncStatus const readStatus) {
             if (readStatus == AsyncStatus::Completed)
             {
-                this->fileName = readOperation.GetResults();
-                this->fileContent = file.DisplayName();
+                this->fileContent = readOperation.GetResults();
+                this->fileName = file.DisplayName();
                 OutputDebugString(fileContent.c_str());  // for debug puposes
- 
+                
             }
             else
             {
                 OutputDebugString(L"Failed to read the text file.\n");
             }
             });
+
+        
     }
 
-    void MainPage::DisplayFileName()
+    void MainPage::fileContentTextBlock_SelectionChanged(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e)
     {
-        fileNameTextBlock().Text(this->fileName);
+        fileContentTextBlock().Text(this->fileContent);
     }
 
-    void MainPage::DisplayFileContent()
-    {
-        fileNameTextBlock().Text(this->fileContent);
-    }
 }
 
 
@@ -150,3 +152,8 @@ namespace winrt::Console_Output_Handler::implementation
 
 
 
+
+void winrt::Console_Output_Handler::implementation::MainPage::ScrollViewer_ViewChanged(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::Controls::ScrollViewerViewChangedEventArgs const& e)
+{
+
+}

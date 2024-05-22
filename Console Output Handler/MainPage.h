@@ -48,14 +48,19 @@ namespace winrt::Console_Output_Handler::implementation
         void PickExecutableOrTextFile();
         void RunExecutableFile(LPCWSTR FILE_PATH);
         void ReadTextFile(winrt::Windows::Storage::StorageFile const& file);
-        void DisplayFileName();
-        void DisplayFileContent();
+        //void DisplayFileName();
+        //void DisplayFileContent();
 
     private:
 
         LPCWSTR ConvertDWORDToLPCWSTR(DWORD value);
         hstring fileName;
         hstring fileContent;
+    public:
+        
+        void loadFileButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
+        void fileContentTextBlock_SelectionChanged(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
+        void ScrollViewer_ViewChanged(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::Controls::ScrollViewerViewChangedEventArgs const& e);
     };
 }
 
