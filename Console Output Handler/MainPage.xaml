@@ -20,7 +20,7 @@
         </StackPanel>
 
         <TextBlock Text="Content inside the text document:" Foreground="White" Style="{StaticResource SubtitleTextBlockStyle}" Padding="30, 50, 30, 50"/>
-        <ScrollViewer Height="282" Width="672"
+        <ScrollViewer Height="307" Width="732"
                       IsTabStop="True" IsVerticalScrollChainingEnabled="True"
                       HorizontalAlignment="Center"
                       ViewChanged="ScrollViewer_ViewChanged"
